@@ -87,8 +87,7 @@ function Set-SecureScore {
                 set-oauthconsent -tenant $tenant.tenantid
                 set-passwordexpire -tenant $tenant.tenantid
                 set-sspr -tenant $tenant.tenantid
-                set-irmdocs -tenant $tenant.tenantid
-                set-customerlockbox -tenant $tenant.tenantid
+        
                 set-userriskpolicy -tenant $tenant.tenantid 
                 set-signinriskpolicy -tenant $tenant.tenantid
                 set-inactiveaccounts -tenant $tenant.tenantid
@@ -101,10 +100,9 @@ function Set-SecureScore {
                 set-oauthconsent -tenant $tenant.tenantid
                 set-passwordexpire -tenant $tenant.tenantid
                 set-sspr -tenant $tenant.tenantid
-                set-irmdocs -tenant $tenant.tenantid
+        
             }
             "MediumImpact" { 
-                set-customerlockbox -tenant $tenant.tenantid
                 set-userriskpolicy -tenant $tenant.tenantid 
                 set-signinriskpolicy -tenant $tenant.tenantid
                 set-inactiveaccounts -tenant $tenant.tenantid
