@@ -8,7 +8,7 @@ function Set-DLPPolicy {
     $SCCcredential = New-Object System.Management.Automation.PSCredential($upn, $SCCTokenValue)
     $SccSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri "https://ps.compliance.protection.outlook.com/powershell-liveid?BasicAuthToOAuthConversion=true&DelegatedOrg=$($tenant.defaultdomainname)" -Credential $SCCcredential -AllowRedirection -Authentication Basic
     $null = import-PSsession $SccSession -disablenamechecking -allowclobber -CommandName New-DlpCompliancePolicy, New-DlpComplianceRule, Get-DlpSensitiveInformationType
-    New-DlpCompliancePolicy -Name "Default DLP Policy" -Comment "Policy made by scripting" -SharePointLocation All -OneDriveLocation All -ExchangeLocation All -Mode Enable
-    New-DlpComplianceRule -Name "Default DLP Policy" -Policy "Default DLP Policy" -ContentContainsSensitiveInformation @{Name = (Get-DlpSensitiveInformationType | Where-Object { $_.name -eq 'Credit Card Number' }).id ; minCount = "1" } -BlockAccess $false
+    New-DlpCompliancePolicy -Name "Default DLP Policy" -Comment "Policy made by scripting" -SharePointLocation All -OneDriveLocation All -ExchangeLocation All -Mode Enable -erroraction "silentlycontinue"
+    New-DlpComplianceRule -Name "Default DLP Policy" -Policy "Default DLP Policy" -ContentContainsSensitiveInformation @{Name = (Get-DlpSensitiveInformationType | Where-Object { $_.name -eq 'Credit Card Number' }).id ; minCount = "1" } -BlockAccess $false  -erroraction "silentlycontinue"
     Remove-PSSession $SccSession
 }

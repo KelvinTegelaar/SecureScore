@@ -7,5 +7,5 @@ function Set-AdminMFA {
     $mf = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
     $mf.RelyingParty = "*"
     $mfa = @($mf)
-    $admins = Get-MsolRoleMember -TenantId $tenant.tenantid -RoleObjectId (Get-MsolRole -RoleName "CompanyAdministrator").ObjectId | Set-MsolUser -StrongAuthenticationRequirements $mfa   
+    $admins = Get-MsolRoleMember -TenantId $tenant.tenantid -RoleObjectId (Get-MsolRole -RoleName "Company Administrator").ObjectId | Set-MsolUser -StrongAuthenticationRequirements $mfa   
 }

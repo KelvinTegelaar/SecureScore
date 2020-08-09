@@ -7,5 +7,5 @@ function Set-MFAUsers {
     $mf = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
     $mf.RelyingParty = "*"
     $mfa = @($mf)
-    get-msoluser -TenantId $tenant.tenantid | Where-Object { $null -eq $_.StrongAuthenticationRequirements.state } | Set-MsolUser -StrongAuthenticationRequirements $mfa   
+    get-msoluser -TenantId $tenant.tenantid | Where-Object { $null -eq $_.StrongAuthenticationRequirements.state } | Set-MsolUser -TenantId $tenant.tenantid -StrongAuthenticationRequirements $mfa  
 }
