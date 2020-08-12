@@ -28,6 +28,7 @@ function Set-SecureScore {
         [Parameter(ParameterSetName = 'TenantID', Mandatory = $true)][string]$TenantID
     )
     $script:confirmed = $Confirmed
+    $script:ExternallyResolved = $ExternallyResolved
     write-host "Generating tokens for logon" -ForegroundColor Green
     try {
         $credential = New-Object System.Management.Automation.PSCredential($ApplicationId, ($ApplicationSecret | ConvertTo-SecureString -Force -AsPlainText))
