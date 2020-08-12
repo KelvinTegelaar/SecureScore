@@ -4,8 +4,10 @@ function Set-UserRiskPolicy {
     Write-Warning "This policy has to be activated manually, but when using external tools such as the cyberdrain.com location monitoring script you can use this method to tell the Secure Score API you are using a third party solution. Would you like to continue?" -WarningAction Inquire
   } 
 
-  if (!$script:ExternallyResolve) {
-    Write-Warning "Marking issue $($issue) as externally resolved by third party tool." -foregroundcolor Green
+  if ($script:ExternallyResolved) {
+    Set-ExternallyResolved -issue 'UserRiskPolicy'
+
+}
     $body = @"
 {
   "assignedTo": "",
