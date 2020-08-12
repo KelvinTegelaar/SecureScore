@@ -17,7 +17,7 @@ function Get-SecureScore {
     }
     catch {
         write-error "Generating tokens failed. $($_.Exception.Message)"
-        break
+       continue
     }
     write-host "Logging into Azure AD" -ForegroundColor Green
     try {
@@ -32,7 +32,7 @@ function Get-SecureScore {
     }
     catch {
         write-error "Logging in to Azure AD failed. $($_.Exception.Message)"
-        break
+        continue
 
     }
     if ($AllTenants) { write-host "Found $($Tenants.count) tenants. Getting secure score for all." -ForegroundColor Green } 
@@ -47,7 +47,6 @@ function Get-SecureScore {
         catch {
             write-error "Logging in to Azure AD failed for $($tenant.DefaultDomainName). $($_.Exception.Message)"
             continue
-    
         }
 
         $headers = @{ "Authorization" = "Bearer $($CustomerToken.AccessToken)" }

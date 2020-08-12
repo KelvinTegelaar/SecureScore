@@ -37,7 +37,7 @@ function Set-SecureScore {
     }
     catch {
         write-error "Generating tokens failed. $($_.Exception.Message)"
-        break
+        continue
     }
     write-host "Logging into Azure AD" -ForegroundColor Green
     try {
@@ -52,11 +52,11 @@ function Set-SecureScore {
     }
     catch {
         write-error "Logging in to Azure AD failed. $($_.Exception.Message)"
-        break
+        continue
     }
     if ($AllTenants) { write-host "Found $($Tenants.count) tenants.." -ForegroundColor Green } 
     else { 
-        write-host "Using $($tenants.DefaultDomainName)." 
+        write-host "Using single domain option." 
     }
 
     foreach ($tenant in $tenants) {
@@ -72,46 +72,46 @@ function Set-SecureScore {
         $script:headers = @{ "Authorization" = "Bearer $($CustomerToken.AccessToken)" }
 
         switch ($ControlName) {
-            "AdminMFAV2" { set-adminmfa -tenant $tenant.tenantid }
-            "DLPEnabled" { set-dlppolicy -tenant $tenant.tenantid } 
-            "IntegratedApps" { set-oauthconsent -tenant $tenant.tenantid }
-            "OneAdmin" { set-breakglassadmin -tenant $tenant.tenantid } 
-            "PWAgePolicyNew" { set-passwordexpire -tenant $tenant.tenantid }
-            "InactiveAccounts" { set-inactiveaccounts -tenant $tenant.tenantid } 
-            "SigninRiskPolicy" { set-signinriskpolicy -tenant $tenant.tenantid } 
-            "UserRiskPolicy" { set-userriskpolicy -tenant $tenant.tenantid } 
-            "MFARegistrationV2" { Set-MFAUsers -tenant $tenant.tenantid } 
-            "SelfServicePasswordReset" { set-sspr -tenant $tenant.tenantid }
+            "AdminMFAV2" { set-adminmfa }
+            "DLPEnabled" { set-dlppolicy } 
+            "IntegratedApps" { set-oauthconsent }
+            "OneAdmin" { set-breakglassadmin } 
+            "PWAgePolicyNew" { set-passwordexpire }
+            "InactiveAccounts" { set-inactiveaccounts } 
+            "SigninRiskPolicy" { set-signinriskpolicy } 
+            "UserRiskPolicy" { set-userriskpolicy } 
+            "MFARegistrationV2" { Set-MFAUsers } 
+            "SelfServicePasswordReset" { set-sspr }
             "All" {
-                set-breakglassadmin -tenant $tenant.tenantid
-                set-dlppolicy -tenant $tenant.tenantid
-                set-oauthconsent -tenant $tenant.tenantid
-                set-passwordexpire -tenant $tenant.tenantid
-                set-sspr -tenant $tenant.tenantid
+                set-breakglassadmin
+                set-dlppolicy
+                set-oauthconsent
+                set-passwordexpire
+                set-sspr
         
-                set-userriskpolicy -tenant $tenant.tenantid 
-                set-signinriskpolicy -tenant $tenant.tenantid
-                set-inactiveaccounts -tenant $tenant.tenantid
-                Set-MFAUsers -tenant $tenant.tenantid
-                set-adminmfa -tenant $tenant.tenantid
+                set-userriskpolicy 
+                set-signinriskpolicy
+                set-inactiveaccounts
+                Set-MFAUsers
+                set-adminmfa
             } 
             "LowImpact" {
-                set-breakglassadmin -tenant $tenant.tenantid
-                set-dlppolicy -tenant $tenant.tenantid
-                set-oauthconsent -tenant $tenant.tenantid
-                set-passwordexpire -tenant $tenant.tenantid
-                set-sspr -tenant $tenant.tenantid
+                set-breakglassadmin
+                set-dlppolicy
+                set-oauthconsent
+                set-passwordexpire
+                set-sspr
         
             }
             "MediumImpact" { 
-                set-userriskpolicy -tenant $tenant.tenantid 
-                set-signinriskpolicy -tenant $tenant.tenantid
-                set-inactiveaccounts -tenant $tenant.tenantid
+                set-userriskpolicy 
+                set-signinriskpolicy
+                set-inactiveaccounts
                  
             }
             "HighImpact" {
-                Set-MFAUsers -tenant $tenant.tenantid
-                set-adminmfa -tenant $tenant.tenantid
+                Set-MFAUsers
+                set-adminmfa
             }
 
         }

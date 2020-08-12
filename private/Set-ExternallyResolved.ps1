@@ -1,6 +1,10 @@
 function Set-ExternallyResolved {
-  [Parameter(Mandatory = $true)]$Issue
-
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [string]
+    $issue
+)
   $body = @"
 {
     "assignedTo": "",
@@ -17,5 +21,5 @@ function Set-ExternallyResolved {
 "@
 
   write-host "Setting $($Issue) to the Externally Resolved / Third Party state"
-  (Invoke-RestMethod -method Patch -Body $body -Uri  "https://graph.microsoft.com/beta/security/secureScoreControlProfiles/$($Issue)" -Headers $Headers -ContentType "application/json").value 
+  Invoke-RestMethod -method Patch -Body $body -Uri  "https://graph.microsoft.com/beta/security/secureScoreControlProfiles/$($Issue)" -Headers $Headers -ContentType "application/json"
 }
