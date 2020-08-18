@@ -17,7 +17,7 @@ function Get-SecureScore {
     }
     catch {
         write-error "Generating tokens failed. $($_.Exception.Message)"
-       continue
+        continue
     }
     write-host "Logging into Azure AD" -ForegroundColor Green
     try {
@@ -50,15 +50,23 @@ function Get-SecureScore {
         }
 
         $headers = @{ "Authorization" = "Bearer $($CustomerToken.AccessToken)" }
+        $counter = 0
         do {
-            $Scores = (Invoke-RestMethod -Uri 'https://graph.microsoft.com/beta/security/securescores?`$top=1' -Headers $Headers -Method Get -ContentType "application/json").value | Select-Object -First 1
-
+            $counter++
+            if($counter -gt 10){
+                Write-Host "Could not connect to SecureScore API for $($tenant.DefaultDomainName). Moving to next client."
+                Break
+            }
+            $Scores = (Invoke-RestMethod -Uri 'https://graph.microsoft.com/beta/security/securescores?`$top=1' -Headers $Headers -Method Get -ContentType "application/json")
+            $ScoreProfiles = (Invoke-RestMethod -Uri 'https://graph.microsoft.com/beta/security/secureScoreControlProfiles' -Headers $Headers -Method Get -ContentType "application/json").value
         } while ($null -eq $scores)
 
         [PSCustomObject]@{
-            TenantName = $($tenant.DefaultDomainName)
-            TenantID   = $($tenant.Tenantid)
-            Scores     = $scores
+            TenantName    = $($tenant.DefaultDomainName)
+            TenantID      = $($tenant.Tenantid)
+            Scores        = $scores.value | Select-Object -first 1
+            ScoreProfiles = $ScoreProfiles
+            Domains       = (Get-MsolDomain -TenantId $tenant.tenantid).name
             
         }
     }
