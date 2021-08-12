@@ -3,7 +3,7 @@ function Set-AdminMFA {
         Write-Warning "This will enable multi-factor authentication for all admin users, and prompt them at first logon to configure MFA. Do you want to continue?" -WarningAction Inquire  
     } 
     if ($script:ExternallyResolved) {
-        Set-ExternallyResolved -issue 'UserRiskPolicy'
+        Set-ExternallyResolved -issue 'AdminMFAV2'
     }
     else {
         $mf = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
