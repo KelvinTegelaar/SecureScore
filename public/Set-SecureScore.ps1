@@ -103,11 +103,13 @@ function Set-SecureScore {
                 set-oauthconsent
                 set-passwordexpire
                 set-sspr
+        
             }
             "MediumImpact" { 
                 set-userriskpolicy 
                 set-signinriskpolicy
                 set-inactiveaccounts
+                 
             }
             "HighImpact" {
                 Set-MFAUsers
