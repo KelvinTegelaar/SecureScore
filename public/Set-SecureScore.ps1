@@ -17,7 +17,8 @@ function Set-SecureScore {
             "SigninRiskPolicy",
             "UserRiskPolicy",
             "MFARegistrationV2",
-            "SelfServicePasswordReset"
+            "SelfServicePasswordReset",
+            "BlockLegacyAuthentication"
         )][string]$ControlName,
         [Parameter(Mandatory = $false)][switch]$ExternallyResolved,
         [Parameter(Mandatory = $true)][string]$upn,
@@ -82,6 +83,7 @@ function Set-SecureScore {
             "UserRiskPolicy" { set-userriskpolicy } 
             "MFARegistrationV2" { Set-MFAUsers } 
             "SelfServicePasswordReset" { set-sspr }
+            "BlockLegacyAuthentication" { Set-BlockLegacyAuthentication }
             "All" {
                 set-breakglassadmin
                 set-dlppolicy
@@ -101,17 +103,20 @@ function Set-SecureScore {
                 set-oauthconsent
                 set-passwordexpire
                 set-sspr
-        
             }
             "MediumImpact" { 
                 set-userriskpolicy 
                 set-signinriskpolicy
                 set-inactiveaccounts
-                 
             }
             "HighImpact" {
                 Set-MFAUsers
                 set-adminmfa
+            }
+            "SecurityDefaults" {
+                Set-MFAUsers
+                set-adminmfa
+                Set-BlockLegacyAuthentication
             }
 
         }
